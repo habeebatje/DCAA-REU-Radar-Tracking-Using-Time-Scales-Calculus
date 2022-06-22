@@ -76,3 +76,6 @@ while iterator<100:
     print(iterator)
 print(z-(H.dot(xp)))
 print("soup")
+u="bannana"
+v=1+5
+print(v)
