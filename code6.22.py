@@ -59,23 +59,28 @@ B = tr(A)
 print(B)
 #--------------
 G = np.array([[0],[1]])
-Q = 1                 
-R = 1
-H = np.array([1,0])
+Q = np.array([[1]])
+R = np.array([[1]])
+Rinv = linalg.inv(R)
+H = np.array([[1,0]])
 P = np.array([[2,0],[0,3]])
 x = np.array([[0],[10]])
-z = np.array([9.5])
+z = np.zeros((1,101))
+np.put(z, [0,0], 9.5)
 #Filter
 iterator = 0
 while iterator<100:
+    #Covariance Generator
+    Pp = (A.dot(P)).dot(tr(A)) + (G.dot(Q)).dot(tr(G))
+    Ppinv = linalg.inv(Pp)
+    Pnoninv = Ppinv + ((tr(H)).dot(Rinv)).dot(H)
+    P = linalg.inv(Pnoninv)
+    #Measurement Update
     xp = A.dot(x)
-    Pp = A.dot(P.dot(tr(A))) + G.dot(np.dot(Q,tr(G)))
-    P = linalg.inv((linalg.inv(Pp))+(tr(H).dot(np.dot(R,H))))
-    x = xp + P.dot(tr(H).dot(np.dot(R,(z-(H.dot(xp))))))
+    zr = z[0,iterator] - H.dot(xp)
+    x = xp + ((P.dot(tr(H))).dot(Rinv)).dot(zr)
+    #Iteration and Z
+    r = z[0,iterator] + 9.5 + random.uniform(0,1)
+    np.put(z, [0,(iterator+1)], r)
     iterator = iterator + 1
-    print(iterator)
-print(z-(H.dot(xp)))
-print("soup")
-u="bannana"
-v=1+5
-print(v)
+print(x)
