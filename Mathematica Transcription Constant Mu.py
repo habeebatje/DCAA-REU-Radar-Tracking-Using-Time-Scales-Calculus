@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 """
-Transcribing Mathematica
+Constant Mu KF
 """
 #Initializing Matrices and T.S.
 #By utilizing functions we can define the matrices in terms of variables and
@@ -96,20 +96,26 @@ for k in range (0,n-1):
     
 #Plotting
 plt.figure(1)
-plt.plot(tslist,radius,'b^',tslist,rsim,'r^')
+plt.plot(tslist,radius,'b^',label='Estimation')
+plt.plot(tslist,rsim,'r^',label='True')
 #Blue is Estimation, Red is Sim
 plt.xlabel('iterations')
 plt.ylabel('radius values')
-plt.title('Radius Simulation v. Estimation')
+plt.title('Radius Actual v. Estimation')
 plt.grid(True)
+plt.legend()
+plt.show()
 
 plt.figure(2)
-plt.plot(tslist,theta,'bo',tslist,tsim,'ro')
+plt.plot(tslist,theta,'bo',label='Estimation')
+plt.plot(tslist,tsim,'ro',label='True')
 #Blue is Estimation, Red is Sim
 plt.xlabel('iterations')
 plt.ylabel('angle values')
-plt.title('Angle Simulation v. Estimation')
+plt.title('Angle Actual v. Estimation')
 plt.grid(True)
+plt.legend()
+plt.show()
 
 plt.figure(3)
 plt.plot(tslist,etar,'y-')
@@ -117,6 +123,7 @@ plt.xlabel('iterations')
 plt.ylabel('Error')
 plt.title('Error for Radius')
 plt.grid(True)
+plt.show()
 
 plt.figure(4)
 plt.plot(tslist,etat,'g-')
@@ -124,4 +131,5 @@ plt.xlabel('iterations')
 plt.ylabel('Error')
 plt.title('Error for Angle')
 plt.grid(True)
+plt.show()
     
