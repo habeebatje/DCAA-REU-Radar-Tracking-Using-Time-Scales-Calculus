@@ -26,7 +26,7 @@ def H(mu):
 def Covw(mu):
     return mat([[((mu**3)/3),((mu**2)/2),0,0],[((mu**2)/2),mu,0,0],[0,0,((mu**3)/3),((mu**2)/2)],[0,0,((mu**2)/2),mu]])
 def R(mu):
-    return (1/mu)*mat([[.001,0],[0,.1]])
+    return (1/mu)*mat([[.1,0],[0,1]])
 I = mat([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
 
 #Desired Values
@@ -35,7 +35,7 @@ n=50
 tslist = [0]
 g = []
 for i in range (0,n-1):
-    mu = 1
+    mu = stats.norm.rvs(loc=.6,scale=.2)
     g.append(mu)
     tslist.append(tslist[i]+mu)
     i = i+1
@@ -47,6 +47,8 @@ xvals = [mat([[0],[0],[0],[0]])]
 zvals = [mat([[0],[0]])]
 rsim = [0]
 tsim = [0]
+zt = [0]
+zr=[0]
 for k in range (0,n-1):
     mu = g[k]
     #system sim
@@ -59,12 +61,14 @@ for k in range (0,n-1):
     rsim.append(xnew[0,0])
     tsim.append(xnew[2,0])
     xvals.append(xnew)
-for k in range (0,n-2):
+for k in range (0,n-1):
     mu = g[k]
     v1 = int(stats.norm.rvs(loc=0,scale=linalg.norm(R(g[k])),size=1))
     v2 = int(stats.norm.rvs(loc=0,scale=linalg.norm(R(g[k])),size=1))
     v = mat([[v1],[v2]])
     znew = H(mu).dot(xvals[k+1]) + v
+    zr.append(znew[0,0])
+    zt.append(znew[1,0])
     zvals.append(znew)
 
 #Initialize
@@ -98,6 +102,7 @@ for k in range (0,n-1):
 plt.figure(1)
 plt.plot(tslist,radius,'b^',label='Estimation')
 plt.plot(tslist,rsim,'r^',label='True')
+#plt.plot(tslist,zr,'g^',label='Measured')
 #Blue is Estimation, Red is Sim
 plt.xlabel('iterations')
 plt.ylabel('radius values')
@@ -109,6 +114,7 @@ plt.show()
 plt.figure(2)
 plt.plot(tslist,theta,'bo',label='Estimation')
 plt.plot(tslist,tsim,'ro',label='True')
+#plt.plot(tslist,zt,'go',label='Measured')
 #Blue is Estimation, Red is Sim
 plt.xlabel('iterations')
 plt.ylabel('angle values')
